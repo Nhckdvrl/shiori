@@ -3,7 +3,7 @@ module.exports={
  appId:'org.shiori.launcher.opensource',productName:'栞 Shiori',
  artifactName:'Shiori-Setup-${version}-${arch}.${ext}',
  directories:{output:path.join(__dirname,'..','dist','installer')},
- win:{target:[{target:'nsis',arch:['x64']}],icon:'public/icon.ico',executableName:'Shiori',requestedExecutionLevel:'asInvoker'},
+ win:{target:[{target:'nsis',arch:['x64']}],icon:'public/icon.ico',executableName:'ShioriLauncher',requestedExecutionLevel:'asInvoker'},
  nsis:{
   oneClick:false,perMachine:false,allowElevation:false,allowToChangeInstallationDirectory:true,
   createDesktopShortcut:true,createStartMenuShortcut:true,shortcutName:'栞 Shiori',

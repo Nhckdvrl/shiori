@@ -20,6 +20,15 @@ test('selecting an individual game folder imports the EXE and overlapping roots 
   const direct=await scanRoots([game]);assert.equal(direct.games.length,1);assert.equal(direct.games[0].title,'新故事');
   const merged=await scanRoots([root,game]);assert.equal(merged.games.length,1);assert.deepEqual(merged.games[0].folderTags.companies,['Key']);
 });
+
+test('launcher manifests are excluded regardless of the installed executable name',async t=>{
+ const dir=temporary(t),launcher=path.join(dir,'launcher'),game=path.join(dir,'another story');
+ put(path.join(launcher,'ShioriLauncher.exe'));put(path.join(launcher,'resources','app','package.json'));
+ fs.writeFileSync(path.join(launcher,'resources','app','package.json'),JSON.stringify({name:'shiori-launcher',main:'main.cjs'}));
+ put(path.join(game,'start.exe'));put(path.join(game,'resources','app','package.json'));
+ fs.writeFileSync(path.join(game,'resources','app','package.json'),JSON.stringify({name:'ordinary-game',main:'game.js'}));
+ const result=await scanRoots([dir]);assert.equal(result.games.length,1);assert.equal(result.games[0].folder,game);
+});
 test('nested game binaries keep the actual title and independent episodes with the same executable name are retained',async t=>{
   const dir=temporary(t),game=path.join(dir,'My new story');put(path.join(game,'Binaries','Win64','Game.exe'));
   const direct=await scanRoots([game]);assert.equal(direct.games[0].title,'My new story');

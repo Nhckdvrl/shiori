@@ -11,6 +11,8 @@ const stage=path.join(root,'dist','.installer-app');
  if(path.dirname(resolved)!==dist||path.basename(resolved)!=='.installer-app')throw Error('Unexpected installer staging path');
  fs.rmSync(resolved,{recursive:true,force:true});fs.mkdirSync(resolved,{recursive:true});
  for(const name of fs.readdirSync(portable))if(name!=='portable.json')fs.cpSync(path.join(portable,name),path.join(resolved,name),{recursive:true});
+ // A distinct executable keeps installation and uninstall checks separate from portable copies.
+ fs.renameSync(path.join(resolved,'Shiori.exe'),path.join(resolved,'ShioriLauncher.exe'));
  // Installed applications use AppData/Shiori; portable.json belongs only to the portable build.
  if(fs.existsSync(path.join(resolved,'portable.json'))||fs.existsSync(path.join(resolved,'data')))throw Error('Installer staging must have no portable marker or user data');
  const config=require('./installer.config.cjs');

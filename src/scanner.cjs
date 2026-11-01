@@ -62,7 +62,7 @@ async function scanRoots(roots, exclude = []) {
     try { entries = await fs.readdir(dir, {withFileTypes:true}); } catch(e) { warnings.push({path:dir, message:e.code}); return; }
     const manifests=[];
     if(entries.some(e=>e.isFile()&&e.name==='package.json'))manifests.push(path.join(dir,'package.json'));
-    if(entries.some(e=>e.isFile()&&/^Shiori\.exe$/i.test(e.name)))manifests.push(path.join(dir,'resources','app','package.json'));
+    if(entries.some(e=>e.isDirectory()&&e.name==='resources'))manifests.push(path.join(dir,'resources','app','package.json'));
     for(const manifest of manifests)try{const pkg=JSON.parse(await fs.readFile(manifest,'utf8'));if(['shiori-launcher','shiori-galgame-launcher'].includes(pkg.name)&&pkg.main==='main.cjs')return;}catch{}
     visited++;
     const parts = path.relative(root, dir).split(path.sep).filter(Boolean);
