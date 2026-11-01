@@ -22,7 +22,7 @@ test('native WinMain visibility across ordinary, LE and emulator launch paths',{
    assert.equal((await reportFor(child,report)).visible,false);
  });
  const modes=[{name:'ordinary game',game:{kind:'windows',launchPath:executable,folder:gameDir,launchArgs:['2']}}];
- const le=findLocaleEmulator();if(le)modes.push({name:'installed Locale Emulator',game:{kind:'windows',launchPath:executable,folder:gameDir,launchArgs:['2'],useLocaleEmulator:true},settings:{localeEmulatorPath:le}});
+ const le=findLocaleEmulator(process.env.SHIORI_TEST_LE_PATH);if(le)modes.push({name:'installed Locale Emulator',game:{kind:'windows',launchPath:executable,folder:gameDir,launchArgs:['2'],useLocaleEmulator:true},settings:{localeEmulatorPath:le}});
  const rom=path.join(gameDir,'测试 镜像.xci');fs.writeFileSync(rom,'disposable emulator argument fixture');
  modes.push({name:'emulator launch with a spaced Unicode ROM path',game:{kind:'rom',launchPath:rom,emulatorPath:executable,folder:gameDir,launchArgs:['2']}});
  for(const [i,mode] of modes.entries())await t.test(mode.name,async()=>{

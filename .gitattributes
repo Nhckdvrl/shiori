@@ -3,3 +3,4 @@
 *.ico binary
 *.dll binary
 *.woff2 binary
+public/fonts/OFL-*.txt -whitespace

@@ -31,8 +31,8 @@ test('atomic store survives restart and recovers previous copy without discardin
 });
 test('tracker follows a handed-off process, pause/resume, and excludes a long sleep gap',()=>{
  const game={id:'g',folder:'C:/games/one',status:'unplayed',playSeconds:0};const state={games:[game],sessions:[]};const store={state,save(){}};const tracker=new Tracker(store);tracker.recovered=true;
- const start=Date.now();tracker.begin(game,10,[]);const s=state.sessions[0];s.startedAt=new Date(start).toISOString();const p={id:10,path:'C:/games/one/launcher.exe',started:start};tracker.tick({at:start,processes:[p]});tracker.tick({at:start+2000,processes:[p]});assert.equal(game.playSeconds,2);
- const child={id:11,path:'C:/games/one/game.exe',started:start+1000};tracker.tick({at:start+4000,processes:[p,child]});tracker.tick({at:start+6000,processes:[child]});assert.equal(game.playSeconds,6);
+ const start=Date.now();tracker.begin(game,10,[]);const s=state.sessions[0];s.startedAt=new Date(start).toISOString();const p={id:10,path:'C:/games/one/launcher.exe',started:start,hasWindow:true};tracker.tick({at:start,processes:[p]});tracker.tick({at:start+2000,processes:[p]});assert.equal(game.playSeconds,2);
+ const child={id:11,path:'C:/games/one/game.exe',started:start+1000,hasWindow:true};tracker.tick({at:start+4000,processes:[p,child]});tracker.tick({at:start+6000,processes:[child]});assert.equal(game.playSeconds,6);
  tracker.pause('g');tracker.tick({at:start+8000,processes:[child]});assert.equal(game.playSeconds,6);tracker.pause('g');tracker.tick({at:start+10000,processes:[child]});assert.equal(game.playSeconds,8);
  tracker.tick({at:start+3600000,processes:[child]});assert.equal(game.playSeconds,8);tracker.tick({at:start+3602000,processes:[]});tracker.tick({at:start+3610000,processes:[]});assert.equal(tracker.active.size,0);assert.ok(s.endedAt);assert.equal(s.seconds,game.playSeconds);
 });
@@ -69,6 +69,7 @@ test('launch state waits for a visible window and reports a background-only proc
  const tracker=new Tracker(store);tracker.recovered=true;tracker.begin(game,77,[]);const start=new Date(store.state.sessions[0].startedAt).getTime();
  const process={id:77,path:'C:/games/visible/game.exe',started:start,hasWindow:false};tracker.tick({at:start+21000,processes:[process]});
  assert.equal(tracker.list()[0].phase,'no-window');assert.equal(game.lastLaunchIssue.kind,'no-window');assert.equal(game.status,'unplayed');assert.equal(game.lastPlayed,undefined);
+ tracker.tick({at:start+22000,processes:[process]});assert.equal(game.playSeconds,0);assert.equal(store.state.sessions[0].seconds,0);
  tracker.tick({at:start+23000,processes:[{...process,hasWindow:true}]});assert.equal(tracker.list()[0].phase,'running');assert.equal(game.lastLaunchIssue,null);assert.equal(game.status,'playing');assert.ok(game.lastPlayed);
 });
 test('multilingual aliases preserve the exact installment number',()=>{

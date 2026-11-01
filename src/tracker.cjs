@@ -52,7 +52,7 @@ class Tracker extends EventEmitter {
       if(alive&&!run.windowSeen&&!run.warnedWindow&&now-new Date(run.session.startedAt).getTime()>20000){run.warnedWindow=true;run.game.lastLaunchIssue={kind:'no-window',message:'游戏进程已运行，但未检测到可见窗口。请检查转区设置、游戏自身提示或运行库。',at:new Date(now).toISOString()};this.store.save();this.emit('warning',run.game.lastLaunchIssue.message);}
       const wasAlive=previous.some(p=>this.matches(run.game,run.session,p));
       if(alive) {run.lastSeen=now;run.seen=true; const p=this.processes.find(p=>p.id===run.session.launchPid);if(p)run.session.pidStarted=p.started;}
-      if(alive && wasAlive && dt>0 && !run.session.paused) {
+      if(alive && wasAlive && run.windowSeen && dt>0 && !run.session.paused) {
         const effectiveStart=Math.max(now-dt*1000,new Date(run.session.startedAt).getTime());
         const seconds=(now-effectiveStart)/1000;
         run.session.seconds+=seconds;run.game.playSeconds=(run.game.playSeconds||0)+seconds;
