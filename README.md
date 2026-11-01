@@ -10,7 +10,7 @@ Shiori 是一个 Windows Galgame 启动器。把游戏目录交给它，整理�
 
 ## 开始收藏
 
-从仓库的 **Releases** 下载 Windows x64 便携版，解压后打开 `Shiori.exe`。
+从仓库的 **Releases** 下载 Windows x64 安装版或便携版。安装版打开 `Shiori-Setup` 按向导安装；便携版解压后打开 `Shiori.exe`。
 
 1. 选择游戏文件夹。支持多个目录、不同磁盘，以及现有的会社、作者和系列目录结构。
 2. 按需连接 Bangumi。登录官方页面，创建个人访问令牌，然后粘贴到首次设置中。
@@ -43,7 +43,7 @@ Shiori 是一个 Windows Galgame 启动器。把游戏目录交给它，整理�
 
 ## 数据与隐私
 
-便携版将设置、游戏库、手记和计时保存到程序旁的 `data/`。在线查询会向资料平台发送检索的游戏名称。Bangumi 令牌使用 Windows 加密保存在独立文件中，仅发送给 Bangumi API；换电脑后重新连接即可。
+安装版将设置、游戏库、手记和计时保存到当前用户的 `AppData/Shiori`，卸载时保留。便携版保存到程序旁的 `data/`。在线查询会向资料平台发送检索的游戏名称。Bangumi 令牌使用 Windows 加密保存在独立文件中，仅发送给 Bangumi API；换电脑后重新连接即可。
 
 可在偏好设置中导出资料与游玩记录。导出文件包含游戏路径与手记，适合自行备份。提问或提交问题时，请使用示例路径，并隐藏账号、令牌和私人记录。
 
@@ -60,6 +60,7 @@ pnpm start
 pnpm test
 pnpm test:e2e
 pnpm package
+pnpm package:installer
 pnpm test:tags
 pnpm test:portability
 pnpm check:release

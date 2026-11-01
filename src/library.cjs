@@ -91,7 +91,7 @@ class Library extends EventEmitter {
   enqueue(retry=false){if(!this.store.state.settings.autoMetadata || this.stopped)return;for(const g of this.store.state.games)if(!g.missing&&!g.hidden&&!g.metadata && (g.metadataState==='pending'||retry) && !this.queue.includes(g.id) && this.currentId!==g.id)this.queue.push(g.id);this.work();}
   async work(){
     if(this.working)return;this.working=true;const total=this.queue.length;let done=0;
-    this.queue.sort((a,b)=>{const priority=id=>this.store.state.games.find(g=>g.id===id)?.localCover?3:(this.store.state.games.find(g=>g.id===id)?.title.length<=6&&this.store.state.games.find(g=>g.id===id)?.folderTags.companies.length)?2:/白日梦|白昼夢|rewrite$|WHITE ALBUM2$|樱之诗|樱之刻|Aokana$|素晴日|MUSICUS/.test(this.store.state.games.find(g=>g.id===id)?.title||'')?1:0;return priority(b)-priority(a);});
+    this.queue.sort((a,b)=>{const priority=id=>this.store.state.games.find(g=>g.id===id)?.localCover?3:(this.store.state.games.find(g=>g.id===id)?.title.length<=6&&this.store.state.games.find(g=>g.id===id)?.folderTags.companies.length)?2:!!this.store.state.games.find(g=>g.id===id)?.executableInfo?.description?1:0;return priority(b)-priority(a);});
     while(this.queue.length&&!this.stopped&&this.store.state.settings.autoMetadata){
       const id=this.queue.shift();this.currentId=id;const g=this.store.state.games.find(x=>x.id===id);if(!g||g.metadata)continue;
       this.metadataProgress={done,total:Math.max(total,done+this.queue.length+1),title:g.title};this.emit('update');

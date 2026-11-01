@@ -2,6 +2,7 @@
   "name": "shiori-launcher",
   "version": "0.5.0",
   "description": "栞 Shiori · Windows 本地视觉小说收藏馆",
+  "author": "Shiori contributors",
   "main": "main.cjs",
   "private": true,
   "scripts": {
@@ -9,6 +10,7 @@
     "test": "node --test tests/*.test.cjs",
     "test:e2e": "node scripts/e2e.cjs",
     "package": "node scripts/package.cjs",
+    "package:installer": "node scripts/package-installer.cjs",
     "check:release": "node scripts/check-release.cjs",
     "check:public": "node scripts/check-public.cjs",
     "export:source": "powershell.exe -NoLogo -NoProfile -ExecutionPolicy Bypass -File scripts/export-source.ps1",
@@ -17,6 +19,7 @@
   },
   "devDependencies": {
     "electron": "45.2.1",
+    "electron-builder": "26.18.0",
     "playwright": "1.62.1"
   },
   "dependencies": {

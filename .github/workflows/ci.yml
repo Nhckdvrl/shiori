@@ -24,3 +24,4 @@ jobs:
       - run: pnpm test:tags
       - run: pnpm test:portability
       - run: pnpm check:release
+      - run: pnpm package:installer
